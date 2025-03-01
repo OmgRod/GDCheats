@@ -4,25 +4,22 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [
-		starlight({
-			title: 'GDCheats',
-			social: {
-				github: 'https://github.com/OmgRod/GDCheats'
-			},
-			sidebar: [
-				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
-				},
-			],
-		}),
-	],
+    base: 'gdcheats',
+    integrations: [
+        starlight({
+            title: 'GDCheats',
+            social: {
+                github: 'https://github.com/OmgRod/GDCheats',
+            },
+            pagefind: false,
+            pagination: false,
+        }),
+    ],
+    vite: {
+      resolve: {
+          alias: {
+              '@': '/src',
+          },
+      },
+    }
 });

@@ -1,0 +1,13 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import SearchBar from '@/components/SearchBar.astro'
+import BaseComponent from '@/components/BaseComponent.astro'
+---
+
+<script src="/gdcheats/search.js" defer></script>
+
+<BaseComponent />
+
+<StarlightPage frontmatter={{ title: 'Search Replays', template: "splash" }}>
+    <SearchBar request="search('request')" />
+</StarlightPage>

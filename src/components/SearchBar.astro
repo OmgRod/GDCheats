@@ -1,0 +1,116 @@
+---
+const { request } = Astro.props;
+---
+
+<style scoped>
+  .search-bar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0;
+  }
+
+  .search-bar-container {
+    background-color: var(--sl-color-gray-4);
+    width: 75%;
+    max-width: 500px;
+    height: 3em;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-top: 0 !important;
+  }
+
+  .search-content-left {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    font-size: 1.2em;
+    color: var(--sl-color-gray-1);
+  }
+
+  .searchbar-content-right {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .searchbar-content-right .search-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    color: var(--sl-color-gray-1);
+    font-size: 1em;
+    outline: none;
+    padding: 0;
+    margin: 0 !important;
+    line-height: 3em;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    min-height: 3em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .searchbar-content-right .search-input::placeholder {
+    color: var(--sl-color-gray-2);
+    opacity: 0.8;
+  }
+</style>
+
+<div class="search-bar-wrapper">
+  <div class="search-bar-container">
+    <div class="search-content-left">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+    <div style="margin: 0 !important;" class="searchbar-content-right">
+      <input class="search-input" type="text" placeholder="Search for replays..." />
+    </div>
+  </div>
+</div>
+
+    <searchQuery style="display: none;">
+        {request}
+    </searchQuery>
+
+<script>
+  // Get the search input element
+  const searchInput = document.querySelector('.search-input');
+
+  // Allow only regular ASCII characters (A-Z, a-z, 0-9, and basic punctuation)
+  const allowedChars = /^[A-Za-z0-9\s.,!?]*$/; // This regex allows alphanumeric characters and common punctuation marks
+  
+  // Function to prevent non-ASCII characters and enter/special symbols
+  function restrictInput(event) {
+    const currentText = searchInput.value;
+
+    // If the new character violates the allowed regex pattern, prevent the input
+    if (!allowedChars.test(currentText)) {
+      searchInput.value = currentText.replace(/[^A-Za-z0-9\s.,!?]/g, '');
+    }
+  }
+
+  // Add the input event listener to filter the input text
+  searchInput.addEventListener('input', restrictInput);
+
+  // Add event listener for 'Enter' key press
+  searchInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();  // Prevent default form submit or other behavior
+
+      const searchTerm = searchInput.value;
+
+      // Here, we replace the 'request' string with the actual search term
+      const dynamicRequestCode = document.querySelector('searchQuery').textContent.replace(/'request'/g, `'${searchTerm}'`);
+
+      // Run the request with the search term as part of the dynamic code
+      eval(dynamicRequestCode);  // Ensure your request string is safely executable
+    }
+  });
+</script>
